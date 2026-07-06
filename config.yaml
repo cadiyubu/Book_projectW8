@@ -1,0 +1,19 @@
+# Project-wide settings — fill in as pipeline takes shape
+paths:
+  raw_scraped: data/raw/scraped
+  raw_api: data/raw/api
+  clean: data/clean
+  figures: figures
+  models: models
+
+scraping:
+  target_count: 500
+  # base_url:
+  # rate_limit_seconds:
+
+api:
+  target_count: 500
+  # base_url:
+  # api_key_env_var: GOODREADS_API_KEY   # store actual key in notebooks/.env
+
+random_seed: 42

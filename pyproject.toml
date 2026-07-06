@@ -1,0 +1,19 @@
+[project]
+name = "project-w9"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "ipykernel>=7.3.0",
+    "jupyter>=1.1.1",
+    "numpy>=2.5.1",
+    "pandas>=3.0.3",
+    "python-dotenv>=1.2.2",
+    "pyyaml>=6.0.3",
+    "requests>=2.34.2",
+    "scikit-learn>=1.9.0",
+    "selenium>=4.45.0",
+    "streamlit>=1.58.0",
+    "webdriver-manager>=4.1.2",
+]
