@@ -61,3 +61,15 @@ def out_csv(df, yaml_path, output_section_yaml, file_name):
 
     df.to_csv(cfg[output_section_yaml][file_name], index=False)
     print(f"File saved to: {cfg[output_section_yaml][file_name]}")
+
+    # -- EDA helpers ----------------------------------------------------------------
+
+def summarise_dataframe(df):
+    """Print shape, dtypes, null counts, and basic stats."""
+    print(f"Shape: {df.shape}")
+    print("\n--- Null counts ---")
+    print(df.isnull().sum()[df.isnull().sum() > 0])
+    print("\n--- Dtypes ---")
+    print(df.dtypes)
+    print("\n--- Describe ---")
+    return df.describe()
