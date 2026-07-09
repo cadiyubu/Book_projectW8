@@ -2,12 +2,5 @@
 raw_data:
   raw_scraped: ../data/raw/goodreads.csv
   raw_api: ../data/raw/google_books.csv
-  clean: data/clean
-  figures: figures
-  models: models
-
-scraping:
-  target_count: 500
-  # base_url:
-  # rate_limit_seconds:
-
+clean_data:
+  clean: ../data/clean/booksDB.csv

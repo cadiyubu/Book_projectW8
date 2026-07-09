@@ -71,5 +71,3 @@ def summarise_dataframe(df):
     print(df.isnull().sum()[df.isnull().sum() > 0])
     print("\n--- Dtypes ---")
     print(df.dtypes)
-    print("\n--- Describe ---")
-    return df.describe()
