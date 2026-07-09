@@ -2,5 +2,7 @@
 raw_data:
   raw_scraped: ../data/raw/goodreads.csv
   raw_api: ../data/raw/google_books.csv
+  raw_combined: ../data/raw/all_books.csv
 clean_data:
   clean: ../data/clean/booksDB.csv
+  clean_st: ../data/clean/streamlitcatalog.csv
