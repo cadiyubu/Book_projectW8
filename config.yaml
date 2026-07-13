@@ -7,3 +7,11 @@ raw_data:
 clean_data:
   clean: ../data/clean/booksDB.csv
   clean_st: ../data/clean/streamlitcatalog.csv
+  clean_mood: ../data/clean/catalog_mood.csv   # output of 5_Sentiment_mood.ipynb — the file app.py reads
+
+sentiment:
+  model: j-hartmann/emotion-english-distilroberta-base
+  min_synopsis_chars: 60
+  max_tokens: 510
+  batch_size: 16
+  low_conf_threshold: 0.40
