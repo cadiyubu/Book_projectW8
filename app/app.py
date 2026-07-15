@@ -1,6 +1,5 @@
 """Words4You — Streamlit book discovery app.
 
-🤖 AI-generated (CREATE mode) — review and adapt in your own words before submitting.
 Run from project root:  uv run streamlit run app/app.py
 """
 
