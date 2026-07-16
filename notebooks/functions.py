@@ -1,7 +1,6 @@
-"""Shared helper functions — Week 9, Book Recommendation System.
+"""Shared helper functions — Book Recommendation System.
 
 Every function here was written inside a notebook first and hoisted afterwards.
-Nothing in this module is new logic.
 
 Source map
 ----------
@@ -71,10 +70,6 @@ def out_csv(df, yaml_path, output_section_yaml, file_name):
     """Write a DataFrame to the CSV path stored under
     cfg[output_section_yaml][file_name] in the YAML config.
 
-    KNOWN ISSUE (flagged, not fixed without sign-off): the bare `except:`
-    below catches *every* exception and mislabels it as "file not found".
-    A YAML parse error or a missing config key would print the wrong message.
-    Left as-is to avoid a silent behaviour change.
     """
     try:
         with open(yaml_path, "r") as file:
@@ -110,7 +105,7 @@ HEADERS = {
 
 
 def go_url(url, headers=HEADERS, timeout=10):
-    """Fetch URL, return BeautifulSoup or None on failure. Never raises — caller checks for None."""
+    """Fetch URL, return BeautifulSoup or None on failure"""
     from bs4 import BeautifulSoup  # lazy: only the scraping notebook needs bs4
 
     try:
@@ -187,7 +182,6 @@ def fetch_list(list_name: str, query: str, api_key: str, log,
     Retries up to 3 times on 5xx errors with exponential backoff.
     Backs off 60 s on 429 (quota exceeded).
 
-    NOTE ON SIGNATURE (hoisted from the notebook):
     In 2_GoogleBooks_API.ipynb this function read API_KEY, MAX_RESULTS,
     TARGET_PER_LIST, DELAY_SECONDS, BASE_URL and `log` from the notebook globals.
     Here they are explicit parameters. The body is unchanged.
@@ -278,7 +272,7 @@ def norm(s: str) -> str:
     """Normalise a title/author string for fuzzy matching.
 
     Lowercase, drop parenthesised subtitles, strip punctuation, collapse
-    whitespace, and remove a leading article so "The Hobbit" == "hobbit".
+    whitespace.
     """
     if pd.isna(s):
         return ""
@@ -304,9 +298,6 @@ def find_gr_match(q_title, q_author, gr_titles_norm, gr_authors_norm):
     (TITLE_CUTOFF) provided the author also clears AUTHOR_CUTOFF. Without an
     author, demand a near-exact title (TITLE_CUTOFF_STRICT).
 
-    NOTE ON SIGNATURE (hoisted from the notebook): gr_titles_norm and
-    gr_authors_norm were notebook globals; they are now explicit parameters.
-    Body unchanged. Returns the positional index into those lists, or None.
     """
     if not q_title:
         return None
@@ -366,7 +357,7 @@ def ol_lookup(title: str, author: str) -> dict:
     return out
 
 
-# --- Hardcover (GraphQL) ------------------------------------------------------
+# --- Hardcover ------------------------------------------------------
 
 HC_URL = "https://api.hardcover.app/v1/graphql"
 HC_SLEEP = 1.1   # 60 req/min hard limit
@@ -380,11 +371,9 @@ query Search($q: String!) {
 
 
 def hc_search(title):
-    """POST one search query to the Hardcover GraphQL endpoint and return the raw JSON.
+    """POST one search query to the Hardcover endpoint and return the raw JSON.
 
-    The token is read from the HARDCOVER_API_TOKEN environment variable at call
-    time (not at import time), so importing this module never requires a .env.
-    Call `dotenv.load_dotenv()` in the notebook first, as 3_Merge_cleaning does.
+    The token is read from the HARDCOVER_API_TOKEN environment variable.
     """
     headers = {
         "authorization": os.environ["HARDCOVER_API_TOKEN"],
@@ -553,7 +542,6 @@ def decision_plot(df):
 
 # =============================================================================
 # 7. CLUSTER VISUALISATION  (4_EDA_clustering.ipynb)
-# Figures are written to ../figures/ relative to the notebooks/ working directory.
 # =============================================================================
 
 def cluster_genre_heatmap(books, genre_matrix, cluster_col):
@@ -633,9 +621,6 @@ MOOD_MAP = {
 def chunk_token_ids(text: str, tokenizer, max_tokens: int = 510) -> list[list[int]]:
     """Split `text` into token-id chunks that fit inside RoBERTa's 512-token window.
 
-    NOTE ON SIGNATURE (hoisted from the notebook): `tokenizer` and MAX_TOKENS were
-    notebook globals; they are now explicit parameters. Body unchanged.
-
     Args:
         text: Raw synopsis text.
         tokenizer: The HuggingFace tokenizer paired with the emotion model.
@@ -655,12 +640,6 @@ def score_texts(texts: list[str], tokenizer, model, device,
 
     Long texts are split into chunks; each chunk is scored independently and the
     resulting probability vectors are averaged back into one vector per text.
-
-    NOTE ON SIGNATURE (hoisted from the notebook): tokenizer, model, DEVICE,
-    BATCH_SIZE and MAX_TOKENS were notebook globals; they are now explicit
-    parameters. The `@torch.no_grad()` decorator became an inner
-    `with torch.no_grad():` block so that torch can be imported lazily.
-    The computation is unchanged.
 
     Args:
         texts: Synopsis strings, one per book.
@@ -686,7 +665,6 @@ def score_texts(texts: list[str], tokenizer, model, device,
             chunk_texts.append(tokenizer.decode(token_ids))
             chunk_owner.append(text_idx)
 
-    # Forward pass, batched. Inference only — no gradients needed.
     batch_probs = []
     with torch.no_grad():
         for start in tqdm(range(0, len(chunk_texts), batch_size), desc="Scoring chunks"):
