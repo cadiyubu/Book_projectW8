@@ -102,7 +102,7 @@ bg_css = (
 st.markdown(
     f"""
     <style>
-    /* 1. Set the background image on the main application viewport */
+    /* Set the background image on the main application viewport */
     [data-testid="stAppViewContainer"] {{
         {bg_css}
         background-size: cover !important;
@@ -112,12 +112,12 @@ st.markdown(
         
     }}
 
-    /* 2. Force intermediate Streamlit structural wrappers to be completely transparent */
+    /* force intermediate Streamlit structural wrappers to be completely transparent */
     [data-testid="stApp"], .main, [data-testid="stHeader"] {{
         background-color: transparent !important;
     }}
 
-    /* 3. Extremely light dark mask (20%) so the library details remain beautiful */
+    /* light dark mask (20%) so the library details remain beautiful */
     [data-testid="stAppViewContainer"]::before {{
         content: "";
         position: fixed;
@@ -129,7 +129,7 @@ st.markdown(
         pointer-events: none;
     }}
 
-    /* 4. Style the central block container to float over the background */
+    /* style the central block container to float over the background */
     [data-testid="stBlockContainer"] {{
         position: relative !important;
         z-index: 99 !important;
@@ -142,7 +142,7 @@ st.markdown(
         max-width: 1200px !important;
     }}
 
-    /* 5. Clean, dark panels that group widgets cleanly together */
+    /* clean, dark panels that group widgets cleanly together */
     .panel {{
         background: #181B1F; 
         border: 1px solid #2C333B;
@@ -153,14 +153,14 @@ st.markdown(
     }}
     .panel h4 {{ color: #E8EDF2; margin: 0; font-weight: 600; }}
 
-    /* 6. FIX: Increase legibility of Streamlit Sliders */
+    /* increase legibility of Streamlit Sliders */
     /* Target the slider labels (e.g., 'Rating', 'Pages') */
     [data-testid="stWidgetLabel"] p {{
         color: #E8EDF2 !important;
         font-weight: 600 !important;
         font-size: 0.95rem !important;
     }}
-    /* Target the small numbers under/over the sliders (e.g., '0.00', '1516') */
+    /* Target the small numbers under/over the sliders */
     [data-testid="stSlider"] div {{
         color: #E8EDF2 !important; /* Forces them from red to crisp off-white */
     }}
@@ -169,7 +169,7 @@ st.markdown(
         background-color: #2D333B !important;
     }}
 
-    /* 7. Design Elements */
+    /* Design Elements */
     .top-bar {{
         display: flex; justify-content: flex-end; gap: 1rem;
         background: #14171B; border-radius: 10px;
@@ -211,7 +211,7 @@ st.markdown(
     .justify-note {{ color: #B9A7D8; font-size: 0.85rem; }}
     .blurb {{ color: #C9D2DB; font-size: 0.93rem; line-height: 1.5; }}
 
-    /* 8. Cinematic spotlight cover — larger, centralized, teal/purple glow */
+    /* cinematic spotlight cover — larger, centralized, teal/purple glow */
     .cover-glow {{
         border-radius: 12px;
         box-shadow: 0 0 30px rgba(38, 166, 154, 0.45),
@@ -226,7 +226,7 @@ st.markdown(
     }}
     .flair-icon {{ font-size: 1.05rem; }}
 
-    /* 9. Similar-reads visual matrix — 4 covers in a grid */
+    /* similar-reads visual matrix covers in a grid */
     .similar-matrix {{
         display: grid; grid-template-columns: repeat(4, 1fr);
         gap: 1rem; margin-top: 0.6rem;
@@ -420,7 +420,7 @@ with st.sidebar:
 col_main, col_right = st.columns([2.2, 1], gap="large")
 
 with col_right:
-    # 1. Group by source_list and find the top 2 lists based on average rating
+    # groupping by source_list and find the top 2 lists based on average rating
     list_avg = (
         app_df.groupby("source_list")["rating"].mean().sort_values(ascending=False)
     )
@@ -439,7 +439,7 @@ with col_right:
         if len(high_rated_pool) < 3:
             high_rated_pool = app_df[app_df["source_list"] == source]
 
-        # 2. If we don't have 3 books saved in memory yet, let's pick them!
+        # if we don't have 3 books saved in memory yet, let's pick them!
         #    Cap sample size at pool length so tiny lists can't raise ValueError.
         n_pick = min(3, len(high_rated_pool))
         if books_key not in st.session_state:
@@ -448,7 +448,7 @@ with col_right:
         # Grab our saved books from memory
         current_books = st.session_state[books_key]
         
-        # 3. Build the list of books in HTML with hyperlinks!
+        # build the list of books in HTML with hyperlinks!
         list_items = []
         for row in current_books.itertuples():
             # Check if we have a valid string URL
@@ -462,19 +462,19 @@ with col_right:
                 # Fallback if there is no URL
                 title_html = f'<b>{row.book_name}</b>'
                 
-            # Combine the title link, author, and rating into a single list item
+            # combine the title link, author, and rating into a single list item
             list_items.append(f"<li>{title_html} — {row.author} (★ {row.rating:.2f})</li>")
             
         items = "".join(list_items)
         
-        # 4. Render the panel
+        # render the panel
         st.markdown(
             f'<div class="panel"><h4>{source}</h4>'
             f'<div class="teal-list"><ol>{items}</ol></div></div>',
             unsafe_allow_html=True,
         )
         
-        # 5. The Shuffle Button
+        #shuffle Button
         # When clicked, we select 3 brand new random books and refresh the page
         if st.button("Shuffle books 🎲", key=f"btn_shuffle_{source}"):
             st.session_state[books_key] = high_rated_pool.sample(n_pick)
@@ -487,7 +487,7 @@ with col_main:
     book = app_df.loc[st.session_state.selected_idx]
     cover_src = resolve_cover(book["img_url"])
     
-    # 1. Resolve synopsis text before rendering the block
+    # Resolve synopsis text before rendering the block
     synopsis = (
         book["synopsis"]
         if isinstance(book["synopsis"], str)
@@ -496,7 +496,7 @@ with col_main:
     clean_edges = str(book['genres_clean']).strip("[]")
     book_genre_clean = clean_edges.replace("'", "")
     
-    # 2. Render the dark spotlight container with BOTH details and the synopsis inside it
+    # render the dark spotlight container with BOTH details and the synopsis inside it
     st.markdown(
         f"""
         <div class="spotlight">
@@ -523,10 +523,10 @@ with col_main:
         unsafe_allow_html=True,
     )
     
-    # 3. Spacing helper
+    # spacing helper
     st.write("") 
     
-    # 4. Buttons row (now sits neatly below the main block)
+    # buttons row (now sits neatly below the main block)
     b1, b2, b3 = st.columns([1.2, 1, 1])
     with b1:
         if st.button("Another book", use_container_width=True):
@@ -546,7 +546,7 @@ with col_main:
                 f"View on {book['data_source']}", url, use_container_width=True
             )
 
-# 5. Similar books — visual recommendation matrix (4 covers with hyperlinked cards)
+#similar books — visual recommendation matrix (4 covers with hyperlinked cards)
     if st.session_state.show_similar:
         st.write("")
         others = [
