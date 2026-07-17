@@ -224,3 +224,4 @@ Every notebook reads and writes through `config.yaml`.
 
 Diana Yule (Caro) — Ironhack Data Analytics, Week 9.
 Presentation link: [https://docs.google.com/presentation/d/1K2lg2DF18auJ1MVzhS6gWnm73jOiJEkb/edit?slide=id.p7#slide=id.p7]
+Online Streamlink app: [https://bookappwords4you.streamlit.app/]
